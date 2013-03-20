@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <style type="text/css">
+      * { margin: 0; padding: 0;}
+
+      body {
+        background-color: rgb(55, 223, 255);
+        padding: 80px;
+      }
+
+      canvas {
+        display: block;
+        margin: auto auto;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="slate" width="800" height="600">
+    </canvas>
+    <script type="text/javascript">
+
+        var drawTrapezoid = function(ctx, topY) {
+          ctx.beginPath();
+          ctx.moveTo(400,topY);
+          ctx.lineTo(200,topY+50);
+          ctx.lineTo(400,topY+100);
+          ctx.lineTo(600,topY+50);
+          ctx.lineTo(400,topY);
+          ctx.stroke();
+          ctx.closePath();
+        }
+
+        var c = document.getElementById('slate');
+        var ctx = c.getContext('2d');
+        for(var i = 1; i <= 500; i*=1.618039){
+          drawTrapezoid(ctx, Math.floor(i));
+        }
+
+    </script>
+  </body>
+
+</html>
