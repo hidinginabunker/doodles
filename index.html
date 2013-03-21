@@ -4,21 +4,71 @@
     <meta charset="utf-8" />
     <style>
     * { margin: 0; padding: 0;}
+
     body {
       font-family: 'Helvetica' 'sans-serif';
-      font-size: 14px;
+      font-size: 25px;
       padding: 80px;
       background-color: rgb(0, 194, 255);
     }
+
+    h1 { font-size: 4em;}
+
+    .description {
+      display: block;
+      margin-bottom: 20px;
+      padding-left: 5px;
+    }
+
+    .doodleListing {
+      min-width: 640px;
+    }
+
+    .doodleListItem {
+      width: 190px;
+      height: 190px;
+      margin: 5px;
+      border: 1px solid #000;
+      float: left;
+    }
+
+    .doodleListItem img {
+      width: 190px;
+      height: 190px;
+    }
+
     </style>
     <title>Doodles</title>
   </head>
   <body>
-    <h1>Doodles</h1>
-    <a href="0001.html">1</a>
-    <a href="0002.html">2</a>
-    <a href="0003.html">3</a>
-    <a href="0004.html">4</a>
-    <a href="0005.html">5</a>
+    <h1 class="title">Doodles</h1>
+    <span class="description">A collection of computer generated doodles</span>
+    <div class="doodleListing">
+      <div class="doodleListItem">
+        <a href="0001">
+          <img src="0001/thumbnail.png" alt="doodle 0001">
+        </a>
+      </div>
+      <div class="doodleListItem">
+        <a href="0002">
+          <img src="0002/thumbnail.png" alt="doodle 0002">
+        </a>
+      </div>
+      <div class="doodleListItem">
+        <a href="0003">
+          <img src="0003/thumbnail.png" alt="doodle 0003">
+        </a>
+      </div>
+      <div class="doodleListItem">
+        <a href="0004">
+          <img src="0004/thumbnail.png" alt="doodle 0004">
+        </a>
+      </div>
+      <div class="doodleListItem">
+        <a href="0005">
+          <img src="0005/thumbnail.png" alt="doodle 0005">
+        </a>
+      </div>
+    </div>
   </body>
 </html>
