@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>Doodles | 0006 | Variation of Album Art for Body Language - Social Studies</title>
+    <style>
+      * { margin:0; padding:0; }
+      body {
+        background-color: rgb(18,18,18);
+      }
+      #canvasContainer {
+        width: 960px;
+        height: 720px;
+        margin: 20px auto 20px auto;
+      }
+      .description {
+        font-family: 'Helvetica' 'sans-serif';
+        font-weight: 100;
+        color: rgb(244,238,224);
+        font-size: 14px;
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+      }
+      .description a {
+        color: rgb(244,238,224);
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+
+
+  <body>
+    <span class="description">Variation of the <a href="http://bodylanguage.bandcamp.com/album/social-studies-single">"Social Studies" by Body Language</a> Album Art</span>
+    <div id="canvasContainer">
+      <canvas id="daCanvas" width="960", height="720">Your browser doesn't support this, how embarrassing!</canvas>
+    </div>
+    <script type="text/javascript">
+     /*
+        Thoughts:
+          - Basically I'm recreating another person's art by first describing the piece to myself as a mathematical strucutre,
+            then using that structure as a guide to instruct the computer how to recreate this structure.  This makes an entirely
+            different kind of art that is describing the process itself, which can then be manipulated, and reused and has
+            all the lovely dunamic properties of code rather than a static image.
+      */
+
+
+      var App = function() {
+        var self = this;
+        window.addEventListener('load', function() {
+          self.init();
+        }, false)
+      }
+
+
+      App.prototype.init = function() {
+
+        // check for canvas support
+        if (!this.isCanvasSupported()) {
+          console.log("yuck! your browser doesn't support canvas!")
+          return;
+        }
+
+        // setup constants
+        this.PI2 = 2*Math.PI
+
+        // setup visual structure
+        this.ringColors = ['rgb(255,177,0)','rgb(255,102,0)','rgb(244,238,224)','rgb(91,200,196)']
+        this.radius = 300;
+        this.spokeStep = 0.05;
+        this.ringStart = 115; //Swtich to 130 for Social Studies mode
+        this.ringHeight = 15;
+
+        // setup elements
+        this.canvas = document.getElementById('daCanvas')
+        this.ctx = this.canvas.getContext('2d')
+        this.render()
+
+      }
+
+
+      App.prototype.isCanvasSupported = function() {
+        return !!document.createElement('canvas').getContext
+      }
+
+      // is it possible to map the radius to steps that are the size of the shape we are drawing?
+      // we might be able to do that with a linear mapping, making it rather simple to arrange things
+      // in a circle, like dancers or synchronized swimmers
+      // it would be like a ring and a spoke
+
+      // would probably be much easier if you drew the shape, transformed it according to ring and spoke, and then placed it
+      App.prototype.drawTriangleAtSpoke = function(cx,cy, radius, spoke, fillColor) {
+        var ctx = this.ctx
+          // calculate the 3 points of the triangle path
+          , x1 = cx + radius*Math.cos(spoke)
+          , y1 = cy + radius*Math.sin(spoke)
+          , x2 = cx + (radius+this.ringHeight)*Math.cos(spoke)
+          , y2 = cy + (radius+this.ringHeight)*Math.sin(spoke)
+          , x3 = cx + (radius+this.ringHeight)*Math.cos(spoke+this.spokeStep) // to sthe next spoke so they are connected
+          , y3 = cy + (radius+this.ringHeight)*Math.sin(spoke+this.spokeStep)
+
+        // render the triangle with the fill
+        ctx.fillStyle = fillColor
+        ctx.beginPath();
+        ctx.moveTo(x1,y1)
+        ctx.lineTo(x2,y2)
+        ctx.lineTo(x3,y3)
+        ctx.lineTo(x1,y1)
+        ctx.stroke();
+        ctx.closePath()
+        ctx.fill()
+      }
+
+
+      App.prototype.render = function() {
+        var cx = this.canvas.width/2
+          , cy = this.canvas.height/2
+          , ringCounter = 1
+
+        // iterate through every ring at every spoke position to draw the triangles
+        for (var spoke = 0; spoke <= this.PI2; spoke += this.spokeStep) {
+          for (var ring = this.ringStart; ring <= this.radius; ring+=this.ringHeight){
+
+            // pick the proper color for this ring and spoke
+            var ringColor = this.ringColors[(ringCounter++)% this.ringColors.length]
+            // draw the triangle at the current location
+            this.drawTriangleAtSpoke(cx, cy, ring, spoke, ringColor)
+
+          }
+        }
+
+      }
+
+
+      var app = new App();
+
+    </script>
+  </body>
+</html>
