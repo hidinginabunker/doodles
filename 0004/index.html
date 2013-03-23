@@ -21,28 +21,15 @@
         // y = b + r sin(t)
         var pi2 = 2*Math.PI;
 
-        var drawCircle = function(ctx, cx, cy, radius) {
-          for (var i = 0; i <= pi2; i+=0.05){
-
-            var x = cx + radius*Math.cos(i);
-            var y = cy + radius*Math.sin(i);
-
-            ctx.beginPath();
-            ctx.moveTo(cx, cy);         // move to center
-            ctx.lineTo(x, y);
-            ctx.stroke();
-            ctx.closePath();
-
-          }
-        }
-
         var drawInnerCircles = function(ctx, cx, cy, ax, ay, radius) {
           for (var i = 0; i <= pi2; i+= 0.1) {
             var x = cx + radius*Math.cos(i);
             var y = cy + radius*Math.sin(i);
 
             ctx.beginPath();
+            // move to origin of circle paths, ax,ay
             ctx.moveTo(ax, ay);
+            // draw from that origin to the edges of the circle centered at cx,cy
             ctx.lineTo(x,y);
             ctx.stroke();
             ctx.closePath();
