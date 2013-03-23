@@ -8,6 +8,10 @@
       * { margin:0; padding:0; }
       body {
         background-color: rgb(18,18,18);
+        font-family: 'Helvetica' 'sans-serif';
+        font-weight: 100;
+        color: rgb(244,238,224);
+        font-size: 14px;
       }
       #canvasContainer {
         width: 960px;
@@ -15,17 +19,18 @@
         margin: 20px auto 20px auto;
       }
       .description {
-        font-family: 'Helvetica' 'sans-serif';
-        font-weight: 100;
-        color: rgb(244,238,224);
-        font-size: 14px;
         position: absolute;
         bottom: 20px;
         right: 20px;
       }
-      .description a {
+      a {
         color: rgb(244,238,224);
         text-decoration: underline;
+      }
+      a.view-source {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
       }
     </style>
   </head>
@@ -33,18 +38,11 @@
 
   <body>
     <span class="description">Variation of the <a href="http://bodylanguage.bandcamp.com/album/social-studies-single">"Social Studies" by Body Language</a> Album Art</span>
+    <a class="view-source" href="https://github.com/hidinginabunker/doodles/blob/master/0006/index.html">Source</a>
     <div id="canvasContainer">
       <canvas id="daCanvas" width="960", height="720">Your browser doesn't support this, how embarrassing!</canvas>
     </div>
     <script type="text/javascript">
-     /*
-        Thoughts:
-          - Basically I'm recreating another person's art by first describing the piece to myself as a mathematical strucutre,
-            then using that structure as a guide to instruct the computer how to recreate this structure.  This makes an entirely
-            different kind of art that is describing the process itself, which can then be manipulated, and reused and has
-            all the lovely dunamic properties of code rather than a static image.
-      */
-
 
       var App = function() {
         var self = this;
