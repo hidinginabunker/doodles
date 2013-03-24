@@ -6,6 +6,7 @@
     <title>Doodles | 0006 | Variation of Album Art for Body Language - Social Studies</title>
     <style>
       * { margin:0; padding:0; }
+
       body {
         background-color: rgb(18,18,18);
         font-family: 'Helvetica' 'sans-serif';
@@ -13,20 +14,45 @@
         color: rgb(244,238,224);
         font-size: 14px;
       }
-      #canvasContainer {
+
+      #daCanvas {
         width: 960px;
         height: 720px;
+        display: block;
         margin: 20px auto 20px auto;
       }
+
+      #canvasControls {
+        width: 160px;
+        height: 160px;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: #222;
+        padding: 20px;
+        border-radius: 5px 5px 5px;
+      }
+
+      #canvasControls form label {
+        display: block;
+        margin-bottom: 7px;
+      }
+
+      fieldSet {
+        border: none;
+      }
+
       .description {
         position: absolute;
         bottom: 20px;
         right: 20px;
       }
+
       a {
         color: rgb(244,238,224);
         text-decoration: underline;
       }
+
       a.view-source {
         position: absolute;
         bottom: 20px;
@@ -37,11 +63,29 @@
 
 
   <body>
+    <canvas id="daCanvas" width="960", height="720">Your browser doesn't support this, how embarrassing!</canvas>
+    <div id="canvasControls">
+      <form class="rangeslider">
+        <fieldset>
+          <label for="outerRadius">outer radius</label>
+          <input name="outerRadius" type="range" min="10" value="300" max="350" step="1" />
+        </fieldset>
+        <fieldset>
+          <label for="innerRadius">inner radius</label>
+          <input name="innerRadius" type="range" min="10" value="115" max="500" step="1" />
+        </fieldset>
+        <fieldset>
+          <label for="spokeStep">spoke step</label>
+          <input name="spokeStep" type="range" min="0.05" value="0.05" max="1" step="0.01" />
+        </fieldset>
+        <fieldset>
+          <label for="ringHeight">ring height</label>
+          <input name="ringHeight" type="range" min="10" value="15" max="200" step="1" />
+        </fieldset>
+      </form>
+    </div>
     <span class="description">Variation of the <a href="http://bodylanguage.bandcamp.com/album/social-studies-single">"Social Studies" by Body Language</a> Album Art</span>
     <a class="view-source" href="https://github.com/hidinginabunker/doodles/blob/master/0006/index.html">Source</a>
-    <div id="canvasContainer">
-      <canvas id="daCanvas" width="960", height="720">Your browser doesn't support this, how embarrassing!</canvas>
-    </div>
     <script type="text/javascript">
 
       var App = function() {
@@ -53,6 +97,7 @@
 
 
       App.prototype.init = function() {
+        var self = this;
 
         // check for canvas support
         if (!this.isCanvasSupported()) {
@@ -63,17 +108,31 @@
         // setup constants
         this.PI2 = 2*Math.PI
 
-        // setup visual structure
+        // setup default visual structure
         this.ringColors = ['rgb(255,177,0)','rgb(255,102,0)','rgb(244,238,224)','rgb(91,200,196)']
-        this.radius = 300;
-        this.spokeStep = 0.05;
-        this.ringStart = 115; //Swtich to 130 for Social Studies mode
-        this.ringHeight = 15;
+        this.radius     = 300
+        this.spokeStep  = 0.05
+        this.ringStart  = 115 //Swtich to 130 for Social Studies mode
+        this.ringHeight = 15
 
-        // setup elements
-        this.canvas = document.getElementById('daCanvas')
-        this.ctx = this.canvas.getContext('2d')
-        this.render()
+        // store refs to control elements
+        this.controlsEl     = document.getElementById('canvasControls')
+
+        this.outerRadiusEl  = document.querySelector('input[name="outerRadius"]')
+        this.innerRadiusEl  = document.querySelector('input[name="innerRadius"]')
+        this.spokeStepEl    = document.querySelector('input[name="spokeStep"]')
+        this.ringHeightEl   = document.querySelector('input[name="ringHeight"]')
+
+        this.canvas         = document.getElementById('daCanvas')
+        this.ctx            = this.canvas.getContext('2d')
+
+        // attach handler to update structure when controls are updated
+        this.controlsEl.addEventListener('change', function(e){
+          self.updateStructure()
+        }, false)
+
+        // update the visual structure from the controls and render
+        this.updateStructure()
 
       }
 
@@ -82,10 +141,15 @@
         return !!document.createElement('canvas').getContext
       }
 
-      // is it possible to map the radius to steps that are the size of the shape we are drawing?
-      // we might be able to do that with a linear mapping, making it rather simple to arrange things
-      // in a circle, like dancers or synchronized swimmers
-      // it would be like a ring and a spoke
+
+      App.prototype.updateStructure = function() {
+        this.radius     = parseInt(this.outerRadiusEl.value, 10)
+        this.ringStart  = parseInt(this.innerRadiusEl.value, 10)
+        this.spokeStep  = parseFloat(this.spokeStepEl.value, 10)
+        this.ringHeight = parseInt(this.ringHeightEl.value, 10)
+        this.render();
+      }
+
 
       // would probably be much easier if you drew the shape, transformed it according to ring and spoke, and then placed it
       App.prototype.drawTriangleAtSpoke = function(cx,cy, radius, spoke, fillColor) {
@@ -111,10 +175,17 @@
       }
 
 
+      App.prototype.clearCanvas = function() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+      }
+
+
       App.prototype.render = function() {
         var cx = this.canvas.width/2
           , cy = this.canvas.height/2
           , ringCounter = 1
+
+        this.clearCanvas()
 
         // iterate through every ring at every spoke position to draw the triangles
         for (var spoke = 0; spoke <= this.PI2; spoke += this.spokeStep) {
