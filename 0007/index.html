@@ -4,75 +4,20 @@
     <meta charset="utf-8" />
     <meta property="og:image" content="http://hidinginabunker.github.com/doodles/0007/thumbnail.png"/>
     <title>Doodles | 0007 | some title</title>
-    <style>
-      * { margin:0; padding:0; }
-
-      body {
-        background-color: rgb(18,18,18);
-        font-family: 'Helvetica' 'sans-serif';
-        font-weight: 100;
-        color: rgb(244,238,224);
-        font-size: 14px;
-      }
-
-      #daCanvas {
-        width: 960px;
-        height: 720px;
-        display: block;
-        margin: 20px auto 20px auto;
-      }
-
-      .description {
-        position: absolute;
-        bottom: 20px;
-        right: 20px;
-      }
-
-      a {
-        color: rgb(244,238,224);
-        text-decoration: underline;
-      }
-
-      a.view-source {
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../css/doodle.css">
   </head>
-
-
   <body>
     <canvas id="daCanvas" width="960", height="720">Your browser doesn't support this, how embarrassing!</canvas>
     <span class="description">Translating mouse and touch events to canvas coordinates</span>
     <a class="view-source" href="https://github.com/hidinginabunker/doodles/blob/master/0007/index.html">Source</a>
+    <script type="text/javascript" src="../js/doodle.js"></script>
     <script type="text/javascript">
 
-      (function() {
-        var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-                                    window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-        window.requestAnimationFrame = requestAnimationFrame;
-      })();
+      var doodle = new Doodle({canvas: 'daCanvas'})
 
-      var App = function() {
+
+      doodle.initScene = function() {
         var self = this;
-        window.addEventListener('load', function() {
-          self.init();
-        }, false)
-      }
-
-
-      App.prototype.init = function() {
-        var self = this;
-
-        // check for canvas support
-        if (!this.isCanvasSupported()) {
-          console.log("yuck! your browser doesn't support canvas!")
-          return;
-        }
-
-        this.canvas = document.getElementById('daCanvas')
-        this.ctx = this.canvas.getContext('2d')
 
         this.scene = {
           rectX: this.canvas.width/2,
@@ -83,49 +28,21 @@
         this.canvas.addEventListener('touchmove', this.getCursorPosHandler())
         this.canvas.addEventListener('touchstart', this.getCursorPosHandler())
 
-        this.animate()
       }
 
 
-      App.prototype.getCursorPosHandler = function() {
+      doodle.getCursorPosHandler = function() {
         var self = this;
         return function(e) {
           e.preventDefault()
-          var coords = self.getCursorPos(e)
+          var coords = self.getCursorPosition(e)
           self.scene.rectX = coords.x
           self.scene.rectY = coords.y
         }
       }
 
 
-      // translates cursor positions to canvas coordinates
-      App.prototype.getCursorPos = function(e) {
-        var x, y
-        if (e.pageX || e.pageY) {
-          x = e.pageX
-          y = e.pageY
-        }
-        else {
-          x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft
-          y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop
-        }
-        x -= this.canvas.offsetLeft
-        y -= this.canvas.offsetTop
-        return {x: x, y: y}
-      }
-
-
-      App.prototype.isCanvasSupported = function() {
-        return !!document.createElement('canvas').getContext
-      }
-
-
-      App.prototype.clearCanvas = function() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-      }
-
-
-      App.prototype.render = function() {
+      doodle.render = function() {
         var ctx = this.ctx
           , squareSize = 100
           , rectWidth = (squareSize*Math.random())
@@ -133,27 +50,16 @@
           , rectX = ((Math.random()*10)+this.scene.rectX) - (rectWidth/2)
           , rectY = ((Math.random()*10)+this.scene.rectY) - (rectHeight/2)
 
-
-        this.clearCanvas()
-
         ctx.beginPath()
         ctx.rect(rectX, rectY, Math.random()*100, Math.random()*100)
         ctx.fillStyle = 'rgba(170,170,187,'+Math.random()+')'
         ctx.fill()
         ctx.closePath()
-
-      }
-
-      App.prototype.animate = function() {
-        var self = this;
-        window.requestAnimationFrame(function(time) {
-          self.render()
-          self.animate()
-        })
       }
 
 
-      var app = new App();
+      doodle.init()
+      doodle.animate()
 
     </script>
   </body>
