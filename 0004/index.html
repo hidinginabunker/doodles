@@ -3,17 +3,19 @@
   <head>
     <meta charset="utf-8" />
     <meta property="og:image" content="http://hidinginabunker.github.com/doodles/0004/thumbnail.png"/>
-    <title>Doodles | 0004 | Concentric Circles</title>
+    <title>Doodles | 0004 | Circles and Rays</title>
     <link rel="stylesheet" type="text/css" href="../css/doodle.css">
     <style type="text/css">
       body {
         background-color: rgb(255, 245, 0);
+        color: black;
       }
+      a { color: black;}
     </style>
   </head>
   <body>
     <canvas id="daCanvas" width="800", height="600">Your browser doesn't support this, how embarrassing!</canvas>
-    <span class="description">Concentric Circles</span>
+    <span class="description">Circles and Rays</span>
     <a class="view-source" href="https://github.com/hidinginabunker/doodles/blob/master/0004/index.html">Source</a>
     <script type="text/javascript" src="../js/doodle.js"></script>
     <script type="text/javascript">
@@ -22,10 +24,26 @@
 
         doodle.initScene = function() {
           this.pi2 = 2*Math.PI;
+
+          this.canvas.addEventListener('mousemove', this.getCursorPosHandler())
+          this.canvas.addEventListener('touchmove', this.getCursorPosHandler())
+          this.canvas.addEventListener('touchstart', this.getCursorPosHandler())
         }
 
-        doodle.drawInnerCircles = function(cx, cy, ax, ay, radius) {
+        doodle.getCursorPosHandler = function() {
+          var self = this;
+          return function(e) {
+            e.preventDefault()
+            var coords = self.getCursorPosition(e)
+            self.clearCanvas()
+            self.drawInnerCircles(coords.x, coords.y, 200)
+          }
+        }
+
+        doodle.drawInnerCircles = function(cursorX, cursorY, radius) {
           var ctx = this.ctx
+            , cx = this.canvas.width/2
+            , cy = this.canvas.height/2
           for (var i = 0; i <= this.pi2; i+= 0.1) {
             // parametric equation for a circle: where t (0,2pi)
             var x = cx + radius*Math.cos(i)  // x = a + r cos(t)
@@ -33,7 +51,7 @@
 
             ctx.beginPath();
             // move to origin of circle paths, ax,ay
-            ctx.moveTo(ax, ay);
+            ctx.moveTo(cursorX-80, cursorY-60);
             // draw from that origin to the edges of the circle centered at cx,cy
             ctx.lineTo(x,y);
             ctx.stroke();
@@ -42,7 +60,7 @@
         }
 
         doodle.render = function() {
-          this.drawInnerCircles(300, 300, 150, 200, 200);
+          this.drawInnerCircles(300, 200, 200);
         }
 
         doodle.init(function(){
