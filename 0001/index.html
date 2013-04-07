@@ -1,60 +1,55 @@
-<html>
+<!DOCTYPE html>
+<html lang="en-US">
   <head>
-  	<title></title>
-  	<style type="text/css">
-    * { margin: 0px; padding: 0px; }
+    <meta charset="utf-8" />
+    <meta property="og:image" content="http://hidinginabunker.github.com/doodles/0001/thumbnail.png"/>
+    <title>Doodles | 0001 | Random Squares</title>
+    <link rel="stylesheet" type="text/css" href="../css/doodle.css">
+    <style type="text/css">
     body {
       background-color: #004;
-      padding: 80px;
-    }
-    canvas {
-      height: 600px;
-      width: 1100px;
-      display: block;
-      margin: 20px auto 0px auto;
     }
     </style>
   </head>
   <body>
-    <canvas id="canvas" height='600px' width='1100px'></canvas>
-  	<script type="text/javascript">
+    <canvas id="daCanvas" height='600px' width='1100px'></canvas>
+    <span class="description">Random Squares</span>
+    <a class="view-source" href="https://github.com/hidinginabunker/doodles/blob/master/0001/index.html">Source</a>
+    <script type="text/javascript" src="../js/doodle.js"></script>
+    <script type="text/javascript">
 
-      var canvas = document.getElementById('canvas');
-      var ctx = canvas.getContext('2d');
+      var doodle = new Doodle({canvas: 'daCanvas'})
 
-      ctx.strokeStyle = '#AAB';
-      ctx.strokeWidth = 1;
-      ctx.save();
+      doodle.initScene = function() {
+        this.boxesCount = 150;
+        this.maxBoxWidth = 40;
+        this.maxBoxHeight = 200;
+      }
 
-      var boxesCount = 200;
-      var maxBoxWidth = 40;
-      var maxBoxHeight = 200;
 
-      animation = setInterval(function animate(){
+      doodle.render = function() {
+        var ctx = this.ctx
+          , canvas = this.canvas
+          , maxBoxWidth = this.maxBoxWidth
+          , maxBoxHeight = this.maxBoxHeight
 
-        var ga = 1;
-        while(ga > 0) {
-          canvas.opacity = ga--;
+        for(var i=1; i <= this.boxesCount; i++){
+          var xPos = Math.random() * (canvas.width - maxBoxWidth)
+            , yPos = Math.random() * (canvas.height - maxBoxHeight)
+            , width = Math.random() * maxBoxWidth
+            , height = Math.random() * maxBoxHeight
+
+          ctx.beginPath()
+          ctx.rect(xPos,yPos,width,height)
+          ctx.fillStyle = 'rgba(170,170,187,'+Math.random()+')'
+          ctx.fill()
+          ctx.closePath()
         }
+      }
 
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        for(var i=1; i <= boxesCount; i++){
-          var xPos = Math.random() * (canvas.width - maxBoxWidth);
-          var yPos = Math.random() * (canvas.height - maxBoxHeight);
-          var width = Math.random() * maxBoxWidth;
-          var height = Math.random() * maxBoxHeight;
-          ctx.beginPath();
-          ctx.rect(xPos,yPos,width,height);
-          ctx.fillStyle = 'rgba(170,170,187,'+Math.random()+')';
-          ctx.fill();
-          ctx.closePath();
-        }
-
-        while(ga < 1) {
-          ctx.opacity = ga++;
-        }
-
-      }, (1000 / 30))
+      doodle.init(function(){
+        doodle.animate()
+      })
 
     </script>
   </body>
