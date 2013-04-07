@@ -1,30 +1,35 @@
-<html>
+<!DOCTYPE html>
+<html lang="en-US">
   <head>
+    <meta charset="utf-8" />
+    <meta property="og:image" content="http://hidinginabunker.github.com/doodles/0004/thumbnail.png"/>
+    <title>Doodles | 0004 | Concentric Circles</title>
+    <link rel="stylesheet" type="text/css" href="../css/doodle.css">
     <style type="text/css">
-      * { margin: 0; padding: 0; }
       body {
         background-color: rgb(255, 245, 0);
-        padding: 80px;
-      }
-      canvas {
-        display: block;
-        margin: auto auto;
       }
     </style>
   </head>
   <body>
-    <canvas id="slate" width="800" height="600" />
+    <canvas id="daCanvas" width="800", height="600">Your browser doesn't support this, how embarrassing!</canvas>
+    <span class="description">Concentric Circles</span>
+    <a class="view-source" href="https://github.com/hidinginabunker/doodles/blob/master/0004/index.html">Source</a>
+    <script type="text/javascript" src="../js/doodle.js"></script>
     <script type="text/javascript">
 
-        // parametric equation for a circle: where t (0,2pi)
-        // x = a + r cos(t)
-        // y = b + r sin(t)
-        var pi2 = 2*Math.PI;
+        var doodle = new Doodle({canvas: 'daCanvas'})
 
-        var drawInnerCircles = function(ctx, cx, cy, ax, ay, radius) {
-          for (var i = 0; i <= pi2; i+= 0.1) {
-            var x = cx + radius*Math.cos(i);
-            var y = cy + radius*Math.sin(i);
+        doodle.initScene = function() {
+          this.pi2 = 2*Math.PI;
+        }
+
+        doodle.drawInnerCircles = function(cx, cy, ax, ay, radius) {
+          var ctx = this.ctx
+          for (var i = 0; i <= this.pi2; i+= 0.1) {
+            // parametric equation for a circle: where t (0,2pi)
+            var x = cx + radius*Math.cos(i)  // x = a + r cos(t)
+            var y = cy + radius*Math.sin(i)  // y = b + r sin(t)
 
             ctx.beginPath();
             // move to origin of circle paths, ax,ay
@@ -36,10 +41,14 @@
           }
         }
 
-        var c = document.getElementById('slate');
-        var ctx = c.getContext('2d');
-        drawInnerCircles(ctx, 300, 300, 150, 200, 200);
+        doodle.render = function() {
+          this.drawInnerCircles(300, 300, 150, 200, 200);
+        }
+
+        doodle.init(function(){
+          doodle.render()
+        })
+
     </script>
   </body>
-
 </html>

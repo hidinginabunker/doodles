@@ -15,7 +15,7 @@ var Doodle = function(config) {
 }
 
 
-Doodle.prototype.init = function() {
+Doodle.prototype.init = function(cb) {
   var self = this
   window.addEventListener('load', function() {
 
@@ -28,6 +28,9 @@ Doodle.prototype.init = function() {
     self.ctx = self.canvas.getContext('2d')
 
     self.initScene();
+    if(cb && typeof cb === 'function'){
+      cb()
+    }
   }, false)
 
 }

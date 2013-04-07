@@ -15,7 +15,6 @@
 
       var doodle = new Doodle({canvas: 'daCanvas'})
 
-
       doodle.initScene = function() {
         var self = this;
 
@@ -30,7 +29,6 @@
 
       }
 
-
       doodle.getCursorPosHandler = function() {
         var self = this;
         return function(e) {
@@ -40,7 +38,6 @@
           self.scene.rectY = coords.y
         }
       }
-
 
       doodle.render = function() {
         var ctx = this.ctx
@@ -57,9 +54,9 @@
         ctx.closePath()
       }
 
-
-      doodle.init()
-      doodle.animate()
+      doodle.init(function() {
+        doodle.animate()
+      })
 
     </script>
   </body>
