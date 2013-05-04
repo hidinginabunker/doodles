@@ -2,4 +2,4 @@ doodles
 =======
 
 Just a bunch of random doodles
-http://hidinginabunker.github.com/doodles/
+http://hidinginabunker.github.io/doodles/
