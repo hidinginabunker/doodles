@@ -73,11 +73,29 @@ Doodle.prototype.render = function() {
 }
 
 
-Doodle.prototype.animate = function() {
+Doodle.prototype._animate = function(lastTime) {
   var self = this;
-  window.requestAnimationFrame(function(time) {
-    self.clearCanvas()
-    self.render()
-    self.animate()
+  window.requestAnimationFrame(function() {
+    var now = Date.now();
+
+    if( (now - lastTime) > self.animStep ) {
+      if(!self.keepCanvas) {
+        self.clearCanvas()
+      }
+      self.render()
+      lastTime = now;
+    }
+
+    self._animate(lastTime)
   })
+
+}
+
+
+Doodle.prototype.animate = function(maxFps, keepCanvas) {
+  maxFps = (!maxFps) ? 1000 : maxFps;
+
+  this.animStep = 1000/maxFps;
+  this.keepCanvas = keepCanvas;
+  this._animate(Date.now())
 }

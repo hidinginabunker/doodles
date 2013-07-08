@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <meta property="og:image" content="http://hidinginabunker.github.com/doodles/0008/thumbnail.png"/>
+    <title>Doodles | 0008 | some title</title>
+    <link rel="stylesheet" type="text/css" href="../css/doodle.css">
+  </head>
+  <body>
+    <canvas id="daCanvas" width="400", height="400" style="width:400px;height: 400px;">Your browser doesn't support this, how embarrassing!</canvas>
+    <div class="controls">
+      <form class="rangeslider">
+        <fieldset>
+          <label for="xSkipPx">horizontal space</label>
+          <input name="xSkipPx" type="range" min="1" value="7" max="50" step="1" />
+        </fieldset>
+        <fieldset>
+          <label for="ySkipPx">vertical space</label>
+          <input name="ySkipPx" type="range" min="1" value="7" max="50" step="1" />
+        </fieldset>
+        <fieldset>
+          <label for="opacity">opacity</label>
+          <input name="opacity" type="range" min="0" value="0.1" max="1" step="0.1" />
+        </fieldset>
+        <fieldset>
+          <label for="noiseWidth">noise width</label>
+          <input name="noiseWidth" type="range" min="1" value="6" max="50" step="1" />
+        </fieldset>
+        <fieldset>
+          <label for="noiseHeight">noise height</label>
+          <input name="noiseHeight" type="range" min="1" value="6" max="50" step="1" />
+        </fieldset>
+      </form>
+    </div>
+    <span class="description">random noise</span>
+    <a class="view-source" href="https://github.com/hidinginabunker/doodles/blob/master/0008/index.html">Source</a>
+    <script type="text/javascript" src="../js/doodle.js"></script>
+    <script type="text/javascript">
+
+      var doodle = new Doodle({canvas: 'daCanvas'})
+
+      doodle.initScene = function() {
+        this.xSkipPx = document.querySelector('input[name="xSkipPx"]')
+        this.ySkipPx = document.querySelector('input[name="ySkipPx"]')
+        this.opacity = document.querySelector('input[name="opacity"]')
+        this.noiseHeight = document.querySelector('input[name="noiseHeight"]')
+        this.noiseWidth = document.querySelector('input[name="noiseWidth"]')
+        this.keepCanvas = document.querySelector('input[name="keepCanvas"]')
+      }
+
+      doodle.render = function() {
+        var ctx = this.ctx
+          , cnvsHeight = parseInt(this.canvas.height, 10)
+          , cnvsWidth = parseInt(this.canvas.width, 10)
+          , xSkipPx = this.xSkipPx.valueAsNumber
+          , ySkipPx = this.ySkipPx.valueAsNumber
+          , rectHeight = this.noiseHeight.valueAsNumber
+          , rectWidth = this.noiseWidth.valueAsNumber
+          , opacity = this.opacity.valueAsNumber
+
+          for(var x = 0; x < cnvsHeight; x += xSkipPx) {
+            for(var y = 0; y < cnvsWidth; y += ySkipPx) {
+              var red = 100
+                , green = Math.floor(Math.random() * 255)
+                , blue = 200
+
+              ctx.fillStyle = ["rgba(",red,",",green,",",blue,",",opacity,")"].join('')
+              ctx.fillRect(x, y, rectWidth, rectHeight);
+            }
+          }
+      }
+
+      doodle.init(function() {
+        doodle.animate(0, true)
+      })
+
+    </script>
+  </body>
+</html>
